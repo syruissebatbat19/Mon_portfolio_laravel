@@ -38,17 +38,28 @@ class PortfolioController extends Controller
             "body" => ["required", "string", "max:2000"],
         ]);
 
+        // Enregistrer le message dans la base de données.
         $message = Message::create($data);
 
-        // Le message est déjà enregistré en base : si l’envoi échoue, il n’est pas perdu.
         try {
-            Mail::to(config("mail.from.address"))->send(new ContactMessage($message));
-        } catch (\Throwable $e) {
-            Log::error("Envoi du mail de contact impossible : " . $e->getMessage());
-        }
+            // Envoyer le mail de notification.
+            Mail::to(config("mail.from.address"))
+                ->send(new ContactMessage($message));
 
-        return redirect()->back()
-            ->withFragment("contact")
-            ->with("sent", "Message envoyé. Je vous réponds rapidement.");
+            return redirect()->back()
+                ->withFragment("contact")
+                ->with("sent", "Message envoyé. Je vous réponds rapidement.");
+
+        } catch (\Throwable $e) {
+
+            // Enregistrer l'erreur dans les logs Laravel.
+            Log::error("Échec de l'envoi du mail de contact", [
+                "error" => $e->getMessage(),
+            ]);
+
+            return redirect()->back()
+                ->withFragment("contact")
+                ->with("error", "Votre message est enregistré, mais son envoi par email a échoué. Veuillez réessayer plus tard.");
+        }
     }
 }
