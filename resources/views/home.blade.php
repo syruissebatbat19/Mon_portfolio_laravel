@@ -65,7 +65,7 @@
             <p>+225 05 00 69 59 46</p>
             <p>Abobo Anonkoua, Abidjan</p>
         </div>
-        <form method="POST" action="{{ route("contact.send") }}">
+        <form method="POST" action="/contact">
             @csrf
             @if (session("sent"))<p class="ok" role="status">{{ session("sent") }}</p>@endif
             <label>Nom <input name="name" value="{{ old("name") }}" required></label>

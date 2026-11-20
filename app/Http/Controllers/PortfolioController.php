@@ -47,7 +47,8 @@ class PortfolioController extends Controller
             Log::error("Envoi du mail de contact impossible : " . $e->getMessage());
         }
 
-        return redirect()->to(route("home") . "#contact")
+        return redirect()->back()
+            ->withFragment("contact")
             ->with("sent", "Message envoyé. Je vous réponds rapidement.");
     }
 }
