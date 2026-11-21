@@ -20,17 +20,24 @@
 
 <section class="block" id="projets">
     <h2>Projets</h2>
+
     <div class="grid">
         @forelse ($projects as $project)
-            <a class="card" href="{{ route("projects.show", $project) }}">
+            <a class="card" href="{{ route('projects.show', $project) }}">
                 <h3>{{ $project->title }}</h3>
+
                 <p>{{ $project->summary }}</p>
-                @if ($project->technologies)
-                    <p class="tags">@foreach ($project->technologies as $t)<span>{{ $t }}</span>@endforeach</p>
+
+                @if (!empty($project->technologies))
+                    <p class="tags">
+                        @foreach ($project->technologies as $t)
+                            <span>{{ $t }}</span>
+                        @endforeach
+                    </p>
                 @endif
             </a>
         @empty
-            <p>Aucun projet pour l’instant. Lancez le seeder pour ajouter les premiers.</p>
+            <p>Aucun projet pour l'instant.</p>
         @endforelse
     </div>
 </section>
